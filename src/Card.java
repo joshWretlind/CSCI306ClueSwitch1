@@ -3,6 +3,18 @@ public class Card {
 	private String name;
 	private String type;
 	
+	public Card(){
+		
+	}
+	
+	public Card(String name){
+		
+	}
+	
+	public Card(String name, String type){
+		
+	}
+	
 	enum CardType {
 		PERSON, WEAPON, ROOM;
 	}
