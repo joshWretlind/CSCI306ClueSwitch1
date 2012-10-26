@@ -32,5 +32,19 @@ public class GameActionsTests {
 	public void testComputerMovement() {
 		
 	}
-
+	
+	@Test
+	public void testComputerGuesses() {
+		
+	}
+	
+	@Test
+	public void testHuamnGuesses() {
+		
+	}
+	
+	@Test
+	public void testMakingComputerGusses() {
+		
+	}
 }
