@@ -1,4 +1,4 @@
-package csci306;
+package dialog;
 
 import javax.swing.JDialog;
 

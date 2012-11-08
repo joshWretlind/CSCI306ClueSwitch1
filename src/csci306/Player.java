@@ -1,5 +1,6 @@
 package csci306;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -82,4 +83,6 @@ public abstract class Player {
 	public void setColor(Color c){
 		color = c;
 	}
+	
+	abstract void draw(Graphics g);
 }

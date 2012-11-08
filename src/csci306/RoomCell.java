@@ -1,5 +1,8 @@
 package csci306;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 
 public class RoomCell extends BoardCell {
 	public enum DoorDirection {
@@ -53,7 +56,6 @@ public class RoomCell extends BoardCell {
 	public boolean isDoorway(){
 		return DoorDirection.NONE != doorDirection;
 	}
-	//Override draw method later
 	public DoorDirection getDoorDirection() {
 		return doorDirection;
 		
@@ -93,4 +95,48 @@ public class RoomCell extends BoardCell {
 		}
 		
 	}
+
+
+	@Override
+	void draw(Graphics g) {
+		int x = col * Board.CELL_SIZE;
+		int y = row * Board.CELL_SIZE;
+		
+		if (doorDirection != DoorDirection.NONE) {
+			int height = 5;
+			int width = Board.CELL_SIZE;
+			switch (doorDirection) {
+			case UP:
+				//x and y remain the same, as does the height and width
+				break;
+			case DOWN:
+				y = (y + Board.CELL_SIZE - 5);
+				height = 5;
+				width = Board.CELL_SIZE;
+				break;
+			case RIGHT:
+				x = (x + Board.CELL_SIZE - 5);
+				height = Board.CELL_SIZE;
+				width = 5;
+				break;
+			case LEFT:
+				height = Board.CELL_SIZE;
+				width = 5;
+				break;
+			}
+			g.setColor(Color.BLUE);
+			g.fillRect(x, y, width, height);
+			
+		}
+		if (displayRoomName) {
+			g.setColor(Color.BLUE);
+			//prepare string
+			String roomName = name;
+			System.out.println("Name: " + name);
+			
+			g.drawString(name, x, y);
+		}
+	}
+	
+	
 }

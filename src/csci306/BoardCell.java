@@ -1,6 +1,8 @@
 package csci306;
 
-public class BoardCell{
+import java.awt.Graphics;
+
+public abstract class BoardCell {
 	
 	protected int row;
 	protected int col;
@@ -32,5 +34,6 @@ public class BoardCell{
 	}
 
 	//Create draw method later
+	abstract void draw(Graphics g);
 	
 }

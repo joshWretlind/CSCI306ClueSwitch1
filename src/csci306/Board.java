@@ -132,7 +132,7 @@ public class Board extends JPanel {
 			for(;colIndex<row.length;colIndex++){
 				if(!row[colIndex].equals("W")){
 					RoomCell roomCell = new RoomCell(rowIndex,colIndex,row[colIndex]);
-					roomCell.setName(rooms.get(row[0]));
+					roomCell.setName(rooms.get(row[0].charAt(0)));
 					cells.add(roomCell);
 				}else{
 					cells.add(new WalkwayCell(rowIndex,colIndex));
@@ -441,57 +441,25 @@ public class Board extends JPanel {
 				BoardCell cell = getCellAt(index);
 				if (cell.isRoom()) {
 					RoomCell roomCell = (RoomCell) cell;
-					//System.out.println("Drawing roomCell: " + roomCell.displayTheName());
-					if (roomCell.isDoorway()) {
-						int height = 5;
-						int width = CELL_SIZE;
-						RoomCell.DoorDirection dir = roomCell.getDoorDirection();
-						switch (dir) {
-						case UP:
-							//x and y remain the same, as does the height and width
-							break;
-						case DOWN:
-							y = (y + CELL_SIZE - 5);
-							height = 5;
-							width = CELL_SIZE;
-							break;
-						case RIGHT:
-							x = (x + CELL_SIZE - 5);
-							height = CELL_SIZE;
-							width = 5;
-							break;
-						case LEFT:
-							height = CELL_SIZE;
-							width = 5;
-							break;
-						}
-						g.setColor(Color.BLUE);
-						g.fillRect(x, y, width, height);
-					} else if (roomCell.displayTheName()) {
+					cell.draw(g);
+					/*
+					if (roomCell.displayTheName()) {
 						g.setColor(Color.BLUE);
 						//prepare string
 						char initial = roomCell.getInitial();
 						String roomName = getRoomName(initial);
 						g.drawString(roomName, x, y);
 					}
+					*/
 				} else if (cell.isWalkway()) {
-					g.setColor(Color.YELLOW);
-					g.fillRect(x, y, CELL_SIZE, CELL_SIZE);
-					g.setColor(Color.BLACK);
-					g.drawRect(x, y, CELL_SIZE, CELL_SIZE);
+					cell.draw(g);
 				}	
 				
 			}
 		}
 		
 		for (Player p : players) {
-			BoardCell location = p.getLocation();
-			int x = location.col * CELL_SIZE;
-			int y = location.row * CELL_SIZE;
-			g.setColor(p.getColor());
-			g.fillOval(x, y, CELL_SIZE, CELL_SIZE);
-			g.setColor(Color.BLACK);
-			g.drawOval(x, y, CELL_SIZE, CELL_SIZE);
+			p.draw(g);
 		}
 	}
 
