@@ -22,11 +22,13 @@ public class NotesDialog extends JDialog {
 	
 	public NotesDialog(Board board){
 		setTitle("Detective Notes");
+		setSize(300,200);
 		setLayout(new GridLayout(3,2));
 		this.board = board;
 		add(createPeopleCheckbox());
 		add(createPeopleCombo());
 		add(createRoomCheckbox());
+		setVisible(true);
 		
 	}
 	
