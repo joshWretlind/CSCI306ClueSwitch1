@@ -1,4 +1,4 @@
-package csci306;
+package dialog;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -12,6 +12,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+import csci306.Board;
+import csci306.Player;
 
 public class NotesDialog extends JDialog {
 	private static final long serialVersionUID = 3370549787533395603L;
