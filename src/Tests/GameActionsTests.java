@@ -107,6 +107,6 @@ public class GameActionsTests {
 		}
 		Assert.assertEquals(equl,2);
 
-		Assert.assertEquals(((RoomCell)compPlayer.getLocation()).name,room.getName());
+		Assert.assertEquals(((RoomCell)compPlayer.getLocation()).getName(),room.getName());
 	}
 }

@@ -2,8 +2,16 @@ package csci306;
 
 
 public class RoomCell extends BoardCell {
+	public enum DoorDirection {
+		UP, DOWN, LEFT, RIGHT,NONE;
+	}
 	
-	public String name;
+	
+	private String name;
+	private DoorDirection doorDirection;
+	private char room;
+	private boolean displayRoomName = false;
+	
 	RoomCell(int row,int col,String room){
 
 		super(row,col);
@@ -27,16 +35,15 @@ public class RoomCell extends BoardCell {
 			default :
 				doorDirection = DoorDirection.NONE;
 			}
-				
+			if (room.charAt(1) == 'N') {
+				displayRoomName = true;
+			}
 		}
 
 		
 	}
-	public enum DoorDirection {
-		UP, DOWN, LEFT, RIGHT,NONE;
-	}
-	private DoorDirection doorDirection;
-	private char room;
+
+
 	@Override
 	public boolean isRoom(){
 		return true;
@@ -63,6 +70,11 @@ public class RoomCell extends BoardCell {
 	public String getName(){
 		return name;
 	}
+	
+	public boolean displayTheName() {
+		return displayRoomName;
+	}
+	
 	@Override
 	public String toString() {
 		switch(doorDirection){

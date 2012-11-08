@@ -35,7 +35,7 @@ public class ComputerPlayer extends Player{
 				hasWeapon = true;
 			}
 		}
-		lastGuessedSolution.setRoom(((RoomCell)super.getLocation()).name);
+		lastGuessedSolution.setRoom(((RoomCell)super.getLocation()).getName());
 	}
 	
 	public void updateSeen(Card seen){

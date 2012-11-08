@@ -1,6 +1,7 @@
 package csci306;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,10 +15,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.TreeSet;
+
+import javax.swing.JPanel;
 
 
-public class Board {
+public class Board extends JPanel {
+	public static final int CELL_SIZE = 25;
+	
 	private List<BoardCell> cells ;
 	public Map<Character,String> rooms;
 	public int numRows;
@@ -25,6 +29,7 @@ public class Board {
 	public List<Player> players;
 	public List<Card> allCards;
 	public Solution solution;
+	Set<Integer> targets;
 	
 	public Board(){
 		cells = new ArrayList<BoardCell>();
@@ -33,9 +38,64 @@ public class Board {
 		allCards = new ArrayList<Card>();
 		
 		loadConfigFiles();
-		
-		
 	}
+	
+	public void loadPlayers() {
+		FileReader frHPlayers;
+		FileReader frCPlayers;
+		Scanner scn;
+		String line="";
+		String [] data;
+		Player cPlayer;
+		Player hPlayer;
+		
+		// Adding the human player
+		try {
+			frHPlayers = new FileReader("Human.txt");
+			scn = new Scanner(frHPlayers);
+			line = scn.nextLine();
+			data = line.split(",");
+
+			hPlayer = new HumanPlayer();
+			// -- HumanPlayer's details
+			hPlayer.setName(data[0]);
+			hPlayer.setColor(convertColor(data[1]));
+			hPlayer.setLocation(getCellAt(calcIndex(Integer.parseInt(data[2]), Integer.parseInt(data[3]))));
+			// -- Adding him/her to the list
+			players.add(hPlayer);
+			frHPlayers.close();
+		} catch(FileNotFoundException e){
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Adding the computer players 
+		try {
+			frCPlayers = new FileReader("People.txt");
+			scn = new Scanner(frCPlayers);
+			while (scn.hasNextLine()) {
+				line = scn.nextLine();
+				data = line.split(",");
+				cPlayer = new ComputerPlayer();
+				// -- ComputerPlayers' details
+				cPlayer.setName(data[0]);
+				cPlayer.setName(data[0]);
+				cPlayer.setColor(convertColor(data[1]));
+				cPlayer.setLocation(getCellAt(calcIndex(Integer.parseInt(data[2]), Integer.parseInt(data[3]))));
+				// -- Adding it to the list
+				players.add(cPlayer);
+				frCPlayers.close();
+			}
+		} catch(FileNotFoundException e){
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private void loadConfigFiles(){
 			//insert try cat
 		FileReader readBoard = null;
@@ -84,7 +144,26 @@ public class Board {
 		numColumns = colIndex;
 	}
 	
-
+	public void loadCards(){
+		FileReader frCards;
+		Scanner scn;
+		String line;
+		String [] data;
+		Card card;
+		try {
+			frCards = new FileReader("Cards.txt");
+			scn = new Scanner(frCards);
+			while (scn.hasNextLine()) {
+				line = scn.nextLine();
+				data = line.split(",");
+				card = new Card(data[1],data[0]);
+				allCards.add(card);	
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public int calcIndex(int row, int col){
 		return row*numColumns+col;
 	}
@@ -224,20 +303,14 @@ public class Board {
 		System.out.print("\n");
 	}
 	
-	
-
-	Set<Integer> targets;
-	
-	
 	public void calcTargets(int startLoc, int numSteps) {
 		targets = new HashSet<Integer>();
 		calcTargets(startLoc,numSteps,new HashSet<Integer>());
 	}
 	
-	
 	public void calcTargets(int startLoc, int numSteps, Set<Integer> seen) {
 		//if bad spot return
-		if(cells.get(startLoc).isRoom()   &&  !cells.get(startLoc).isDoorway()){
+		if(cells.get(startLoc).isRoom() && !cells.get(startLoc).isDoorway()){
 			return;
 		}
 		///1 0
@@ -245,7 +318,7 @@ public class Board {
 		if(seen.contains(startLoc))
 			return;
 		seen.add(startLoc);
-		if(numSteps == 0 || (cells.get(startLoc).isDoorway()    && seen.size()>1)){
+		if(numSteps == 0 || (cells.get(startLoc).isDoorway() && seen.size()>1)){
 			targets.add(startLoc);
 			return;
 		}
@@ -273,63 +346,7 @@ public class Board {
 		//update that there is no starting location for a new dice roll
 		return tempTargets;
 	}
-	
-	public void loadPlayers() {
-		FileReader frHPlayers;
-		FileReader frCPlayers;
-		Scanner scn;
-		String line="";
-		String [] data;
-		Player cPlayer;
-		Player hPlayer;
-		
-		// Adding the human player
-		try {
-			frHPlayers = new FileReader("Human.txt");
-			scn = new Scanner(frHPlayers);
-			line = scn.nextLine();
-			data = line.split(",");
 
-			hPlayer = new HumanPlayer();
-			// -- HumanPlayer's details
-			hPlayer.setName(data[0]);
-			hPlayer.setColor(convertColor(data[1]));
-			hPlayer.setLocation(getCellAt(calcIndex(Integer.parseInt(data[2]), Integer.parseInt(data[3]))));
-			// -- Adding him/her to the list
-			players.add(hPlayer);
-			frHPlayers.close();
-		} catch(FileNotFoundException e){
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		// Adding the computer players 
-		try {
-			frCPlayers = new FileReader("People.txt");
-			scn = new Scanner(frCPlayers);
-			while (scn.hasNextLine()) {
-				line = scn.nextLine();
-				data = line.split(",");
-				cPlayer = new ComputerPlayer();
-				// -- ComputerPlayers' details
-				cPlayer.setName(data[0]);
-				cPlayer.setName(data[0]);
-				cPlayer.setColor(convertColor(data[1]));
-				cPlayer.setLocation(getCellAt(calcIndex(Integer.parseInt(data[2]), Integer.parseInt(data[3]))));
-				// -- Adding it to the list
-				players.add(cPlayer);
-				frCPlayers.close();
-			}
-		} catch(FileNotFoundException e){
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	public boolean checkAccusation(String person, String weapon, String room){
 		if (person.equals(solution.getPerson()) && 
 				weapon.equals(solution.getWeapon()) && 
@@ -395,26 +412,6 @@ public class Board {
 		return solution;
 	}
 	
-	public void loadCards(){
-		FileReader frCards;
-		Scanner scn;
-		String line;
-		String [] data;
-		Card card;
-		try {
-			frCards = new FileReader("Cards.txt");
-			scn = new Scanner(frCards);
-			while (scn.hasNextLine()) {
-				line = scn.nextLine();
-				data = line.split(",");
-				card = new Card(data[1],data[0]);
-				allCards.add(card);	
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public Color convertColor(String strColor) {
 		Color color; 
 		try {     
@@ -428,11 +425,74 @@ public class Board {
 	}
 
 	
-	public static void main(String[] args) {
-		Board b = new Board();
-		b.loadPlayers();
-		System.out.println(b.players);
+	/*
+	 * DRAWING METHODS
+	 */
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.setColor(Color.GRAY);
+		g.fillRect(0, 0, numColumns * CELL_SIZE, numRows * CELL_SIZE);
+		for (int i = 0; i < numRows; ++i) {
+			for (int j = 0; j < numColumns; ++j) {
+				int index = calcIndex(i, j);
+				int x = j * CELL_SIZE;
+				int y = i * CELL_SIZE;
+				
+				BoardCell cell = getCellAt(index);
+				if (cell.isRoom()) {
+					RoomCell roomCell = (RoomCell) cell;
+					//System.out.println("Drawing roomCell: " + roomCell.displayTheName());
+					if (roomCell.isDoorway()) {
+						int height = 5;
+						int width = CELL_SIZE;
+						RoomCell.DoorDirection dir = roomCell.getDoorDirection();
+						switch (dir) {
+						case UP:
+							//x and y remain the same, as does the height and width
+							break;
+						case DOWN:
+							y = (y + CELL_SIZE - 5);
+							height = 5;
+							width = CELL_SIZE;
+							break;
+						case RIGHT:
+							x = (x + CELL_SIZE - 5);
+							height = CELL_SIZE;
+							width = 5;
+							break;
+						case LEFT:
+							height = CELL_SIZE;
+							width = 5;
+							break;
+						}
+						g.setColor(Color.BLUE);
+						g.fillRect(x, y, width, height);
+					} else if (roomCell.displayTheName()) {
+						g.setColor(Color.BLUE);
+						//prepare string
+						char initial = roomCell.getInitial();
+						String roomName = getRoomName(initial);
+						g.drawString(roomName, x, y);
+					}
+				} else if (cell.isWalkway()) {
+					g.setColor(Color.YELLOW);
+					g.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+					g.setColor(Color.BLACK);
+					g.drawRect(x, y, CELL_SIZE, CELL_SIZE);
+				}	
+				
+			}
+		}
+		
+		for (Player p : players) {
+			BoardCell location = p.getLocation();
+			int x = location.col * CELL_SIZE;
+			int y = location.row * CELL_SIZE;
+			g.setColor(p.getColor());
+			g.fillOval(x, y, CELL_SIZE, CELL_SIZE);
+			g.setColor(Color.BLACK);
+			g.drawOval(x, y, CELL_SIZE, CELL_SIZE);
+		}
 	}
-	
 
 }
