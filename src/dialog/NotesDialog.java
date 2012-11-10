@@ -10,10 +10,12 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import csci306.Board;
+import csci306.Card;
 import csci306.Player;
 
 public class NotesDialog extends JDialog {
@@ -22,14 +24,55 @@ public class NotesDialog extends JDialog {
 	
 	public NotesDialog(Board board){
 		setTitle("Detective Notes");
-		setLayout(new GridLayout(3,2));
+		setSize(600,800);
+		setLayout(new GridLayout(0,2));
 		this.board = board;
 		add(createPeopleCheckbox());
 		add(createPeopleCombo());
 		add(createRoomCheckbox());
+		add(createRoomCombo());
+		add(createWeaponCheckBox());
+		add(createWeaponCombo());
+		setVisible(true);
 		
 	}
 	
+	private JPanel createWeaponCombo(){
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(new EtchedBorder(), "Weapon Choice"));
+		JComboBox box = new JComboBox();
+		for(Card c: board.allCards){
+			if(c.getType().equalsIgnoreCase("WEAPON")){
+				box.addItem(c.getName());
+			}
+		}
+		panel.add(box);
+		return panel;
+	}
+	
+	private JPanel createWeaponCheckBox(){
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
+		for(Card c: board.allCards){
+			if(c.getType().equalsIgnoreCase("WEAPON")){
+				JCheckBox box = new JCheckBox(c.getName());
+				panel.add(box);
+			}
+		}
+		return panel;
+	}
+	
+	private JPanel createRoomCombo() {
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(new EtchedBorder(), "Room Guess"));
+		JComboBox box = new JComboBox();
+		for(String s: board.rooms.values()){
+			box.addItem(s);
+		}
+		panel.add(box);
+		return panel;
+	}
+
 	private JPanel createRoomCheckbox() {
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder (new EtchedBorder(), "Rooms"));
