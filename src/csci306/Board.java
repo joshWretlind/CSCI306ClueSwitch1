@@ -442,15 +442,6 @@ public class Board extends JPanel {
 				if (cell.isRoom()) {
 					RoomCell roomCell = (RoomCell) cell;
 					cell.draw(g);
-					/*
-					if (roomCell.displayTheName()) {
-						g.setColor(Color.BLUE);
-						//prepare string
-						char initial = roomCell.getInitial();
-						String roomName = getRoomName(initial);
-						g.drawString(roomName, x, y);
-					}
-					*/
 				} else if (cell.isWalkway()) {
 					cell.draw(g);
 				}	
@@ -461,6 +452,8 @@ public class Board extends JPanel {
 		for (Player p : players) {
 			p.draw(g);
 		}
+		g.setColor(Color.BLACK);
+		g.drawRect(0, 0, numColumns * CELL_SIZE, numRows * CELL_SIZE);
 	}
 
 }

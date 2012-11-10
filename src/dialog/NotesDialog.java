@@ -24,7 +24,7 @@ public class NotesDialog extends JDialog {
 	
 	public NotesDialog(Board board){
 		setTitle("Detective Notes");
-		setSize(600,800);
+		setSize(600,700);
 		setLayout(new GridLayout(0,2));
 		this.board = board;
 		add(createPeopleCheckbox());
