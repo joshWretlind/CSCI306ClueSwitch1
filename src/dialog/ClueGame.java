@@ -36,7 +36,7 @@ public class ClueGame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JDialog showNotesDialog = new NotesDialog();
+				JDialog showNotesDialog = new NotesDialog(board);
 				showNotesDialog.setVisible(true);
 			}
 			
