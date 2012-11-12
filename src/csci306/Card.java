@@ -2,26 +2,36 @@ package csci306;
 
 public class Card {
 	private String name;
-	private String type;
+	private CardType type;
 	
 
 	
 	public Card(String name, String type){
 		this.name = name;
-		this.type = type.toUpperCase();
+		setType(type);
 	}
 	
-	enum CardType {
+	public enum CardType {
 		PERSON, WEAPON, ROOM;
 	}
 	
 	
-	public String getType() {
+	public CardType getType() {
 		return type;
 	}
 
 	public void setType(String type) {
-		this.type = type;
+		switch(type.toUpperCase()) {
+		case "PERSON":
+			this.type = CardType.PERSON;
+			break;
+		case "WEAPON":
+			this.type = CardType.WEAPON;
+			break;
+		case "ROOM":
+			this.type = CardType.ROOM;
+			break;
+		}
 	}
 	
 	public String getName(){

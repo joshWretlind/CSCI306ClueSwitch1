@@ -31,6 +31,10 @@ public class Board extends JPanel {
 	public Solution solution;
 	Set<Integer> targets;
 	
+	private Player hPlayer;
+	
+	private int whoseTurn;
+	
 	public Board(){
 		cells = new ArrayList<BoardCell>();
 		rooms = new HashMap<Character,String>();
@@ -38,8 +42,13 @@ public class Board extends JPanel {
 		allCards = new ArrayList<Card>();
 		
 		loadConfigFiles();
+		loadPlayers();
+		loadCards();
+		deal();
+		
+		whoseTurn = 0;
 	}
-	
+
 	public void loadPlayers() {
 		FileReader frHPlayers;
 		FileReader frCPlayers;
@@ -47,7 +56,7 @@ public class Board extends JPanel {
 		String line="";
 		String [] data;
 		Player cPlayer;
-		Player hPlayer;
+
 		
 		// Adding the human player
 		try {
@@ -132,7 +141,7 @@ public class Board extends JPanel {
 			for(;colIndex<row.length;colIndex++){
 				if(!row[colIndex].equals("W")){
 					RoomCell roomCell = new RoomCell(rowIndex,colIndex,row[colIndex]);
-					roomCell.setName(rooms.get(row[0].charAt(0)));
+					roomCell.setName(rooms.get(row[colIndex].charAt(0)));
 					cells.add(roomCell);
 				}else{
 					cells.add(new WalkwayCell(rowIndex,colIndex));
@@ -157,7 +166,7 @@ public class Board extends JPanel {
 				line = scn.nextLine();
 				data = line.split(",");
 				card = new Card(data[1],data[0]);
-				allCards.add(card);	
+				allCards.add(card);
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -182,6 +191,14 @@ public class Board extends JPanel {
 	
 	public String getRoomName(char c){
 		return rooms.get(c);
+	}
+	
+	public Player getHumanPlayer() {
+		return hPlayer;
+	}
+	
+	public List<Card> getCards() {
+		return allCards;
 	}
 	
 	public RoomCell.DoorDirection doorDirectionAtIndex(int row, int col){
@@ -357,6 +374,7 @@ public class Board extends JPanel {
 	}
 
 	public void handleSuggestion(String person, String weapon, String room){
+		//TODO: Handle suggestion in GUI
 		Collections.shuffle(players);
 		
 		for(Player p: players){
@@ -371,47 +389,55 @@ public class Board extends JPanel {
 	}
 	
 	public void deal(){
-		Collections.shuffle(allCards);
+		selectAnswer();
+
 		for (int i = 0; i < allCards.size(); i++) {
-			players.get(i%players.size()).getCards().add(allCards.get(i));
-		}
-	}
-	
-	public void deal(ArrayList<Card> cards){
-		Collections.shuffle(cards);
-		for (int i = 0; i < cards.size(); i++) {
-			players.get(i%players.size()).getCards().add(cards.get(i));
+			players.get(i % players.size()).getCards().add(allCards.get(i));
 		}
 	}
 	
 	public void selectAnswer(){
 		boolean hasPerson = false, hasWeapon = false, hasRoom = false;
-		Solution sol = new Solution();
+		solution = new Solution();
 		
-		Collections.shuffle(allCards);
+		List<Card> cardsCopy = new ArrayList<Card>(allCards);
 		
-		for (Card c: allCards) {
-			if (!hasPerson && c.getType().equals("PERSON")) {
-				sol.setPerson(c.getName());
+		Collections.shuffle(cardsCopy);
+		for (Card c : cardsCopy) {
+			if (!hasPerson && c.getType() == Card.CardType.PERSON) {
+				solution.setPerson(c.getName());
+				allCards.remove(c);
 				hasPerson = true;
 			}
-			else if (!hasWeapon && c.getType().equals("WEAPON")) {
-				sol.setWeapon(c.getName());
+			else if (!hasWeapon && c.getType() == Card.CardType.WEAPON) {
+				solution.setWeapon(c.getName());
+				allCards.remove(c);
 				hasWeapon = true;
 			}
-			else if (!hasRoom && c.getType().equals("ROOM")) {
-				sol.setRoom(c.getName());
+			else if (!hasRoom && c.getType() == Card.CardType.ROOM) {
+				solution.setRoom(c.getName());
+				allCards.remove(c);
 				hasRoom = true;
 			}
 		}
-		
-		solution = sol;
 	}
 	
 	public Solution getAnswer(){
 		return solution;
 	}
 	
+	public Player getWhoseTurn() {
+		return players.get(whoseTurn);
+	}
+	public void nextTurn() {
+		whoseTurn = (++whoseTurn % players.size());
+		//TODO: re-roll dice
+	}
+
+	
+	/*
+	 * DRAWING METHODS
+	 */	
 	public Color convertColor(String strColor) {
 		Color color; 
 		try {     
@@ -423,11 +449,6 @@ public class Board extends JPanel {
 		}
 		return color;
 	}
-
-	
-	/*
-	 * DRAWING METHODS
-	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.setColor(Color.GRAY);

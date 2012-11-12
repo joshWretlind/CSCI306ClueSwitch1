@@ -45,10 +45,7 @@ public class BoardTest {
 	}
 
 	@Test
-	public void isDoorStuff(){
-		RoomCell bc = board.getRoomCellAt(4, 3);
-		
-		System.out.println(bc.getInitial());
+	public void isDoorStuff(){		
 		Assert.assertEquals(RoomCell.DoorDirection.RIGHT,board.doorDirectionAtIndex(4, 3));
 		Assert.assertEquals('D',board.roomInitialAtIndex(19, 10));
 		Assert.assertEquals(27,board.calcIndex(1, 4));

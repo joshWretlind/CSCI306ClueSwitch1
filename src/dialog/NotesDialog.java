@@ -42,7 +42,7 @@ public class NotesDialog extends JDialog {
 		panel.setBorder(new TitledBorder(new EtchedBorder(), "Weapon Choice"));
 		JComboBox box = new JComboBox();
 		for(Card c: board.allCards){
-			if(c.getType().equalsIgnoreCase("WEAPON")){
+			if(c.getType() == Card.CardType.WEAPON){
 				box.addItem(c.getName());
 			}
 		}
@@ -54,7 +54,7 @@ public class NotesDialog extends JDialog {
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
 		for(Card c: board.allCards){
-			if(c.getType().equalsIgnoreCase("WEAPON")){
+			if(c.getType() == Card.CardType.WEAPON){
 				JCheckBox box = new JCheckBox(c.getName());
 				panel.add(box);
 			}

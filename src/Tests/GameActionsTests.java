@@ -27,17 +27,13 @@ public class GameActionsTests {
 	
 	@Before
 	public void before() {
+		
 		board = new Board();
-		board.loadPlayers();
-		board.loadCards();
-		board.deal();
 	}
 	
 	@Test
 	public void testAccusation() {
-		board.selectAnswer();
 		Solution solution = board.getAnswer();
-		
 		Assert.assertFalse(board.checkAccusation("", "", ""));
 		Assert.assertTrue(board.checkAccusation(solution.person, solution.weapon, solution.room));
 	}

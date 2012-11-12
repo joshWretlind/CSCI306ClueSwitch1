@@ -132,7 +132,6 @@ public class RoomCell extends BoardCell {
 			g.setColor(Color.BLUE);
 			//prepare string
 			String roomName = name;
-			System.out.println("Name: " + name);
 			
 			g.drawString(name, x, y);
 		}

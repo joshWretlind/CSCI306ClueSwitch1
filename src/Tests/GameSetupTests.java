@@ -21,7 +21,9 @@ public class GameSetupTests {
 	
 	@Before
 	public void before() {
+		
 		board = new Board();
+		
 		try{
 			
 		}catch(Exception e){
@@ -67,15 +69,21 @@ public class GameSetupTests {
 		//Check if there is the same number of cards of each type
 		for(Card card: board.allCards) {
 			switch (card.getType()) {
-				case "PERSON": playerCardCount++;
-				case "ROOM": roomCardCount++;
-				case "WEAPON": weaponCardCount++;
+				case PERSON: 
+					playerCardCount++;
+					break;
+				case ROOM: 
+					roomCardCount++;
+					break;
+				case WEAPON: 
+					weaponCardCount++;
+					break;
 			}
 		}
-		
-		Assert.assertEquals(playerCardCount, roomCardCount);
-		Assert.assertEquals(roomCardCount, weaponCardCount);
-		Assert.assertEquals(playerCardCount, weaponCardCount);
+
+		Assert.assertEquals(6, playerCardCount);
+		Assert.assertEquals(9, roomCardCount);
+		Assert.assertEquals(6, playerCardCount);
 	}
 	
 	@Test

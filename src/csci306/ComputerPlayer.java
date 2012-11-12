@@ -27,7 +27,6 @@ public class ComputerPlayer extends Player{
 		boolean hasWeapon = false;
 				
 		for (Card c: availableGuesses) {
-			System.out.println(c.getName());
 			if (!hasPerson && c.getType().equals("PERSON")) {
 				lastGuessedSolution.setPerson(c.getName());
 				hasPerson = true;

@@ -29,4 +29,8 @@ public class Solution {
 	public void setRoom(String room) {
 		this.room = room;
 	}
+	
+	public String toString() {
+		return "<" + person + " " + weapon + " " + room + ">"; 
+	}
 }
