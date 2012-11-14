@@ -142,6 +142,7 @@ public class ClueGame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				board.nextTurn();
 				whoseTurn.setText(board.getWhoseTurn().getName());
+				rollDiceField.setText(Integer.toString(board.dieRoll));
 			}
 			
 		});
@@ -149,8 +150,10 @@ public class ClueGame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AccusationDialog accDiag = new AccusationDialog(board);
-				accDiag.setVisible(true);
+				if(board.getWhoseTurn() instanceof csci306.HumanPlayer){ // only create this dialog when it's the human player's turn
+					AccusationDialog accDiag = new AccusationDialog(board);
+					accDiag.setVisible(true);
+				}
 				
 			}
 			
@@ -171,8 +174,4 @@ public class ClueGame extends JFrame {
 		
 		return ret;
 	}
-	public static void main(String[] args) {
-		
-	}
-
 }

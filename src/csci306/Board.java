@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -29,9 +30,10 @@ public class Board extends JPanel {
 	public List<Player> players;
 	public List<Card> allCards;
 	public Solution solution;
+	public boolean hasFinishedTurn;
 	Set<Integer> targets;
-	
 	private Player hPlayer;
+	public int dieRoll;
 	
 	private int whoseTurn;
 	
@@ -364,6 +366,9 @@ public class Board extends JPanel {
 		return tempTargets;
 	}
 
+	public boolean checkAccusation(Solution s){
+		return checkAccusation(s.person, s.weapon, s.room);
+	}
 	public boolean checkAccusation(String person, String weapon, String room){
 		if (person.equals(solution.getPerson()) && 
 				weapon.equals(solution.getWeapon()) && 
@@ -373,9 +378,14 @@ public class Board extends JPanel {
 		return false;
 	}
 
-	public void handleSuggestion(String person, String weapon, String room){
+	public boolean handleSuggestion(Solution s){
+		return handleSuggestion(s.person, s.weapon, s.room);
+	}
+	
+	public boolean handleSuggestion(String person, String weapon, String room){
 		//TODO: Handle suggestion in GUI
 		Collections.shuffle(players);
+		boolean proven = false;
 		
 		for(Player p: players){
 			if(p.disproveSuggestion(person, weapon, room) != null){
@@ -384,8 +394,10 @@ public class Board extends JPanel {
 					seen.add(p.disproveSuggestion(person, weapon, room));
 					p2.setSeenCards(seen);
 				}
+				proven = true;
 			}
 		}
+		return proven;
 	}
 	
 	public void deal(){
@@ -430,11 +442,45 @@ public class Board extends JPanel {
 		return players.get(whoseTurn);
 	}
 	public void nextTurn() {
+		hasFinishedTurn = false;
 		whoseTurn = (++whoseTurn % players.size());
-		//TODO: re-roll dice
+		makeMove(players.get(whoseTurn));
 	}
 
+	public void rollDie(){
+		Random r = new Random();
+		int i = r.nextInt();
+		if(i < 0){
+			i *= -1;
+		}
+		dieRoll = i%6 +1;
+	}
 	
+	public void makeMove(Player p){
+		if(p instanceof csci306.ComputerPlayer){
+			rollDie();
+			System.out.println(dieRoll);
+			calcTargets(calcIndex(p.getLocation().row, p.getLocation().col),dieRoll);
+			List<BoardCell> potentialTargets = new ArrayList<BoardCell>(getTargets());
+			Collections.shuffle(potentialTargets);
+			p.setLocation(potentialTargets.get(0)); // Move to our new location
+			if(p.getLocation().isRoom()){
+				//Make an suggestion. 
+				((csci306.ComputerPlayer) p).createSuggestion();
+				if(!handleSuggestion(((csci306.ComputerPlayer) p).getLastGuessedSolution())){
+					// if suggestion was not disproven, make it an accusation.
+					checkAccusation(((csci306.ComputerPlayer) p).getLastGuessedSolution());
+					//TODO: Create a popup that displays the accusation.
+				}
+			}
+			
+			hasFinishedTurn = true;
+			paintComponent(super.getGraphics()); // repaint the board
+		} else {
+			// We have a human player, handle the human's input
+		}
+		
+	}
 	/*
 	 * DRAWING METHODS
 	 */	
@@ -477,4 +523,5 @@ public class Board extends JPanel {
 		g.drawRect(0, 0, numColumns * CELL_SIZE, numRows * CELL_SIZE);
 	}
 
+	
 }

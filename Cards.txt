@@ -4,6 +4,12 @@ weapon,weapon3
 weapon,weapon4
 weapon,weapon5
 weapon,weapon6
+weapon,weapon7
+weapon,weapon8
+weapon,weapon9
+weapon,weapon10
+weapon,weapon11
+weapon,weapon12
 person,name1
 person,name2
 person,name3
