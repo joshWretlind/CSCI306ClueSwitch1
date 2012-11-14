@@ -172,8 +172,7 @@ public class ClueGame extends JFrame {
 		return ret;
 	}
 	public static void main(String[] args) {
-		ClueGame cb = new ClueGame();
-		cb.setVisible(true);
+		
 	}
 
 }

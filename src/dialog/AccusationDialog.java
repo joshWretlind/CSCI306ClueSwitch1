@@ -15,6 +15,7 @@ import csci306.Card.CardType;
 
 public class AccusationDialog extends JDialog {
 
+	private static final long serialVersionUID = -483259800725920714L;
 	private Board board;
 	public AccusationDialog(Board board) {
 		setTitle("Detective Notes");
