@@ -149,6 +149,8 @@ public class ClueGame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				AccusationDialog accDiag = new AccusationDialog(board);
+				accDiag.setVisible(true);
 				
 			}
 			
