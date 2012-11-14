@@ -96,8 +96,9 @@ public class Board extends JPanel {
 				cPlayer.setLocation(getCellAt(calcIndex(Integer.parseInt(data[2]), Integer.parseInt(data[3]))));
 				// -- Adding it to the list
 				players.add(cPlayer);
-				frCPlayers.close();
 			}
+			frCPlayers.close();
+
 		} catch(FileNotFoundException e){
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -410,9 +411,7 @@ public class Board extends JPanel {
 	public void selectAnswer(){
 		boolean hasPerson = false, hasWeapon = false, hasRoom = false;
 		solution = new Solution();
-		
 		List<Card> cardsCopy = new ArrayList<Card>(allCards);
-		
 		Collections.shuffle(cardsCopy);
 		for (Card c : cardsCopy) {
 			if (!hasPerson && c.getType() == Card.CardType.PERSON) {
@@ -458,7 +457,6 @@ public class Board extends JPanel {
 	public void makeMove(Player p){
 		if(p instanceof csci306.ComputerPlayer){
 			rollDie();
-			System.out.println(dieRoll);
 			calcTargets(calcIndex(p.getLocation().row, p.getLocation().col),dieRoll);
 			List<BoardCell> potentialTargets = new ArrayList<BoardCell>(getTargets());
 			Collections.shuffle(potentialTargets);
@@ -470,6 +468,11 @@ public class Board extends JPanel {
 					// if suggestion was not disproven, make it an accusation.
 					checkAccusation(((csci306.ComputerPlayer) p).getLastGuessedSolution());
 					//TODO: Create a popup that displays the accusation.
+				}
+				for(Player player: players){
+					if(player.getName().equalsIgnoreCase(((csci306.ComputerPlayer) p).getLastGuessedSolution().person)){
+						player.setLocation(p.getLocation());
+					}
 				}
 			}
 			hasFinishedTurn = true;

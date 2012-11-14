@@ -58,6 +58,7 @@ public class ComputerPlayer extends Player{
 		this.lastGuessedSolution = lastGuessedSolution;
 	}
 	
+	
 	@Override
 	void draw(Graphics g) {
 		BoardCell location = getLocation();

@@ -77,9 +77,9 @@ public class ClueGame extends JFrame {
 	
 	public void createBoard() {
 		board = new Board();
-		board.loadPlayers();
-		board.loadCards();
-		board.deal();
+		//board.loadPlayers(); Dont do this. The constructor automatically loads and deals the cards.
+		//board.loadCards();
+		//board.deal();
 	}
 	
 	public void createControls() {
