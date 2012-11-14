@@ -92,7 +92,6 @@ public class Board extends JPanel {
 				cPlayer = new ComputerPlayer();
 				// -- ComputerPlayers' details
 				cPlayer.setName(data[0]);
-				cPlayer.setName(data[0]);
 				cPlayer.setColor(convertColor(data[1]));
 				cPlayer.setLocation(getCellAt(calcIndex(Integer.parseInt(data[2]), Integer.parseInt(data[3]))));
 				// -- Adding it to the list
@@ -473,7 +472,6 @@ public class Board extends JPanel {
 					//TODO: Create a popup that displays the accusation.
 				}
 			}
-			
 			hasFinishedTurn = true;
 			paintComponent(super.getGraphics()); // repaint the board
 		} else {

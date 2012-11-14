@@ -103,7 +103,7 @@ public class ClueGame extends JFrame {
 		JPanel guessPanel = new JPanel();
 		JPanel guessResult = new JPanel();
 		
-		rollDiceField = new JTextField();
+		final JTextField rollDiceField = new JTextField(Integer.toString(board.dieRoll));
 		rollDiceField.setEditable(false);
 		
 		guessField = new JTextField();
