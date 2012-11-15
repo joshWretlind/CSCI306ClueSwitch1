@@ -19,11 +19,15 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import dialog.ClueGame;
 
 
 public class Board extends JPanel implements MouseListener {
 	public static final int CELL_SIZE = 25;
+
 	
 	private List<BoardCell> cells ;
 	public Map<Character,String> rooms;
@@ -39,7 +43,10 @@ public class Board extends JPanel implements MouseListener {
 	
 	private int whoseTurn;
 	
-	public Board(){
+	public boolean madeSuggestion;
+	public Solution lastGuessedSuggestion;
+
+	public Board() {
 		cells = new ArrayList<BoardCell>();
 		rooms = new HashMap<Character,String>();
 		players = new ArrayList<Player>();
@@ -388,11 +395,13 @@ public class Board extends JPanel implements MouseListener {
 	}
 
 	public boolean handleSuggestion(Solution s){
+		madeSuggestion = true;
+		lastGuessedSuggestion = s;
 		return handleSuggestion(s.person, s.weapon, s.room);
 	}
 	
 	public boolean handleSuggestion(String person, String weapon, String room){
-		//TODO: Handle suggestion in GUI
+		
 		Collections.shuffle(players);
 		boolean proven = false;
 		
@@ -449,6 +458,10 @@ public class Board extends JPanel implements MouseListener {
 		return players.get(whoseTurn);
 	}
 	public void nextTurn() {
+		if (humanTurn) {
+			JOptionPane.showMessageDialog(this, "Please make a turn before moving onto the next turn");
+			return;
+		}
 		whoseTurn = (++whoseTurn % players.size());
 		makeMove(players.get(whoseTurn));
 	}
@@ -462,8 +475,10 @@ public class Board extends JPanel implements MouseListener {
 		dieRoll = i%6 +1;
 	}
 	
-	public void makeMove(Player p){
+	public void makeMove(Player p){		
 		rollDie();
+		
+		madeSuggestion = false;
 		
 		if (targets != null)
 			for (int c : targets)
@@ -559,21 +574,29 @@ public class Board extends JPanel implements MouseListener {
 			int col = x / CELL_SIZE;
 			int row = y / CELL_SIZE;
 			
+			int selectedIndex = -1;
+			
 			for (int i : targets) {
 				BoardCell p = getCellAt(i);
 				if (p.getRow() == row && p.getCol() == col) {
-					if (p.isRoom()) {
-						//TODO: Create Suggestion dialog
-						
-					} else {
-						hPlayer.setLocation(p);
-					}
-					
-					resetTargetFlags();
-					paintComponent(super.getGraphics()); // repaint the board because the human player moved
+					selectedIndex = i;
 					break;
+				}				
+			}
+			if (selectedIndex == -1) {
+				JOptionPane.showMessageDialog(this, "Invalid move");
+			} else {
+				BoardCell p = getCellAt(selectedIndex);
+				if (p.isRoom()) {
+					//TODO: Create Suggestion dialog
+					
+				} else {
+					hPlayer.setLocation(p);
 				}
 				
+				resetTargetFlags();
+				paintComponent(super.getGraphics()); // repaint the board because the human player moved
+				humanTurn = false;
 			}
 			
 		}
