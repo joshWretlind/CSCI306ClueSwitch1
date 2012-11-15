@@ -15,10 +15,11 @@ import javax.swing.border.TitledBorder;
 import csci306.Board;
 import csci306.Card;
 import csci306.Player;
+import csci306.RoomCell;
 import csci306.Solution;
 import csci306.Card.CardType;
 
-public class AccusationDialog extends JDialog {
+public class SuggestionDialog extends JDialog {
 
 	private final JComboBox<String> personBox = new JComboBox<String>();
 	private final JComboBox<String> roomBox = new JComboBox<String>();
@@ -26,29 +27,30 @@ public class AccusationDialog extends JDialog {
 	
 	private static final long serialVersionUID = -483259800725920714L;
 	private final Board board_copy; // this is an extra copy 
-	public AccusationDialog(Board board) {
-		setTitle("Detective Notes");
+	
+	public SuggestionDialog(Board board) {
+		setTitle("Make Suggestion");
 		setSize(300,300);
 		setLayout(new GridLayout(0,1));
 		this.board_copy = board;
 		add(createPersonPanel());
 		add(createWeaponPanel());
-		add(createRoomPanel());
-		JButton accuse = new JButton("Accuse!");
-		add(accuse);
-		accuse.addActionListener(new ActionListener() {
+		JButton suggest = new JButton("Suggest!");
+		add(suggest);
+		suggest.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Solution guess = new Solution();
 				guess.person = (String) personBox.getSelectedItem();
-				guess.room = (String) roomBox.getSelectedItem();
+				guess.room = ((RoomCell) board_copy.hPlayer.getLocation()).getName();
+				System.out.println("room: " + guess.room);
 				guess.weapon = (String) weaponBox.getSelectedItem();
-				boolean check = board_copy.checkAccusation(guess);
+				boolean check = board_copy.handleSuggestion(guess, board_copy.hPlayer.getLocation());
 				if(!check){
-					String notRight = "Sorry, but your accusation was not correct";
+					String notRight = "Sorry, but your suggestion was not correct";
 					JOptionPane.showMessageDialog(null, notRight);
 				} else {
-					String right = "Congradulations, your accusation was correct";
+					String right = "Congradulations, your suggestion was correct";
 					JOptionPane.showMessageDialog(null, right);
 				}
 			}

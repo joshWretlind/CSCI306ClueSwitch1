@@ -73,7 +73,7 @@ public class GameActionsTests {
 		List<Card> seen = compPlayer.getSeenCards();
 		compPlayer.createSuggestion();
 		Solution solution = compPlayer.getLastGuessedSolution();
-		board.handleSuggestion(solution.person, solution.weapon, solution.room);
+		board.handleSuggestion(solution.person, solution.weapon, solution.room, compPlayer.getLocation());
 		List<Card> seenAfterSuggestion = compPlayer.getSeenCards();
 		
 		Assert.assertTrue(!seen.equals(seenAfterSuggestion));

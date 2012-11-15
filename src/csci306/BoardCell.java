@@ -40,6 +40,10 @@ public abstract class BoardCell {
 		isTarget = false;
 	}
 	
+	public String toString() {
+		return "<" + row + ", " + col + ">";
+	}
+	
 	abstract void draw(Graphics g);
 	
 }

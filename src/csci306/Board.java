@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import dialog.ClueGame;
+import dialog.SuggestionDialog;
 
 
 public class Board extends JPanel implements MouseListener {
@@ -38,13 +39,14 @@ public class Board extends JPanel implements MouseListener {
 	public Solution solution;
 	public boolean humanTurn;
 	Set<Integer> targets;
-	private Player hPlayer;
+	public Player hPlayer;
 	public int dieRoll;
 	
 	private int whoseTurn;
 	
 	public boolean madeSuggestion;
 	public Solution lastGuessedSuggestion;
+	public Card lastProvenCard;
 
 	public Board() {
 		cells = new ArrayList<BoardCell>();
@@ -394,19 +396,23 @@ public class Board extends JPanel implements MouseListener {
 		return false;
 	}
 
-	public boolean handleSuggestion(Solution s){
+	public boolean handleSuggestion(Solution s, BoardCell cell){
 		madeSuggestion = true;
 		lastGuessedSuggestion = s;
-		return handleSuggestion(s.person, s.weapon, s.room);
+		return handleSuggestion(s.person, s.weapon, s.room, cell);
 	}
 	
-	public boolean handleSuggestion(String person, String weapon, String room){
+	public boolean handleSuggestion(String person, String weapon, String room, BoardCell cell){
 		
 		Collections.shuffle(players);
 		boolean proven = false;
 		
 		for(Player p: players){
+			if (p.getName().equals(person)) {
+				p.setLocation(cell);
+			}
 			if(p.disproveSuggestion(person, weapon, room) != null){
+				lastProvenCard = p.disproveSuggestion(person, weapon, room); 
 				for(Player p2: players){
 					p2.addSeenCard(p.disproveSuggestion(person, weapon, room));
 				}
@@ -496,7 +502,7 @@ public class Board extends JPanel implements MouseListener {
 				//Make an suggestion. 
 				cp.createSuggestion();
 				System.out.println("Attempting suggestion");
-				if(!handleSuggestion(cp.getLastGuessedSolution())) {
+				if(!handleSuggestion(cp.getLastGuessedSolution(), cp.getLocation())) {
 					// if suggestion was not disproven, make it an accusation.
 					checkAccusation(cp.getLastGuessedSolution());
 					//TODO: Create a popup that displays the accusation.
@@ -588,7 +594,9 @@ public class Board extends JPanel implements MouseListener {
 			} else {
 				BoardCell p = getCellAt(selectedIndex);
 				if (p.isRoom()) {
-					//TODO: Create Suggestion dialog
+					hPlayer.setLocation(p);
+					SuggestionDialog sd = new SuggestionDialog(this);
+					sd.setVisible(true);
 					
 				} else {
 					hPlayer.setLocation(p);
