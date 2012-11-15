@@ -26,11 +26,11 @@ import csci306.Card;
 import csci306.HumanPlayer;
 
 public class ClueGame extends JFrame {
-	Board board;
+	private Board board;
 	
-	JTextField rollDiceField;
-	JTextField guessField;
-	JTextField guessResultField;
+	private JTextField rollDiceField;
+	private JTextField guessField;
+	private JTextField guessResultField;
 	
 	
 	public ClueGame() {
@@ -108,10 +108,10 @@ public class ClueGame extends JFrame {
 		final JTextField rollDiceField = new JTextField(Integer.toString(board.dieRoll));
 		rollDiceField.setEditable(false);
 		
-		guessField = new JTextField();
+		guessField = new JTextField("");
 		guessField.setEditable(false);
 		
-		guessResultField = new JTextField();
+		guessResultField = new JTextField("");
 		guessResultField.setEditable(false);
 		
 		dieRollPanel.setBorder(new TitledBorder(new EtchedBorder(), "Die"));
@@ -145,6 +145,10 @@ public class ClueGame extends JFrame {
 				board.nextTurn();
 				whoseTurn.setText(board.getWhoseTurn().getName());
 				rollDiceField.setText(Integer.toString(board.dieRoll));
+				//show suggestion if available;
+				if (board.madeSuggestion) {
+					guessField.setText(board.lastGuessedSuggestion.toString());
+				}
 			}
 			
 		});
@@ -177,5 +181,13 @@ public class ClueGame extends JFrame {
 		}
 		
 		return ret;
+	}
+	
+	public void setGuessField(String s) {
+		guessField.setText(s);
+	}
+	
+	public void setGuessResultField(String s) {
+		guessResultField.setText(s);
 	}
 }

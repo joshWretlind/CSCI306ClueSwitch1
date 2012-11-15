@@ -31,6 +31,6 @@ public class Solution {
 	}
 	
 	public String toString() {
-		return "<" + person + " " + weapon + " " + room + ">"; 
+		return "<" + person + " with " + weapon + " in " + room + ">"; 
 	}
 }
