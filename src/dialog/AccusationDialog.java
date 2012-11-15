@@ -57,9 +57,12 @@ public class AccusationDialog extends JDialog {
 	public JPanel createPersonPanel(){
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(new EtchedBorder(), "Person:"));
-		for(Player p: board_copy.players){
-			personBox.addItem(p.getName());
+		for(Card c: board_copy.allCards){
+			if(c.getType() == CardType.PERSON){
+				personBox.addItem(c.getName());
+			}
 		}
+		personBox.addItem(board_copy.solution.person);
 		panel.add(personBox);
 		return panel;
 	}
@@ -72,6 +75,7 @@ public class AccusationDialog extends JDialog {
 				weaponBox.addItem(c.getName());
 			}
 		}
+		weaponBox.addItem(board_copy.solution.weapon);
 		panel.add(weaponBox);
 		return panel;
 	}
@@ -79,9 +83,12 @@ public class AccusationDialog extends JDialog {
 	public JPanel createRoomPanel(){
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(new EtchedBorder(), "Room:"));
-		for(String room: board_copy.rooms.values()){
-			roomBox.addItem(room);
+		for(Card c: board_copy.allCards){
+			if(c.getType() == CardType.ROOM){
+				roomBox.addItem(c.getName());
+			}
 		}
+		roomBox.addItem(board_copy.solution.room);
 		panel.add(roomBox);
 		return panel;
 	}
