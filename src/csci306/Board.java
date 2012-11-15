@@ -423,13 +423,16 @@ public class Board extends JPanel implements MouseListener {
 	}
 	
 	public void deal(){
-		selectAnswer();
+		List<Card> copyAllCards = new ArrayList<Card>(allCards);
 		for (Player p : players) {
 			p.setPossibleCards(allCards);
 		}
+		selectAnswer();
 		for (int i = 0; i < allCards.size(); i++) {
 			players.get(i % players.size()).getCards().add(allCards.get(i));
 		}
+		
+		allCards = copyAllCards;
 	}
 	
 	public void selectAnswer(){
@@ -454,6 +457,8 @@ public class Board extends JPanel implements MouseListener {
 				hasRoom = true;
 			}
 		}
+		System.out.println("Solution: " + solution.getPerson() + "," + solution.getRoom()
+				+ ", " + solution.getWeapon());
 	}
 	
 	public Solution getAnswer(){
@@ -501,11 +506,16 @@ public class Board extends JPanel implements MouseListener {
 			if(p.getLocation().isRoom()){
 				//Make an suggestion. 
 				cp.createSuggestion();
-				System.out.println("Attempting suggestion");
 				if(!handleSuggestion(cp.getLastGuessedSolution(), cp.getLocation())) {
 					// if suggestion was not disproven, make it an accusation.
-					checkAccusation(cp.getLastGuessedSolution());
-					//TODO: Create a popup that displays the accusation.
+					boolean check = checkAccusation(cp.getLastGuessedSolution());
+					if(!check){
+						String notRight = "The computer attempted: " + cp.getLastGuessedSolution().toString() + "...but was incorrect!";
+						JOptionPane.showMessageDialog(null, notRight);
+					} else {
+						String right = "The computer attempted: " + cp.getLastGuessedSolution().toString() + "...and was correct!";
+						JOptionPane.showMessageDialog(null, right);
+					}
 				}
 				for(Player player: players){
 					if(player.getName().equalsIgnoreCase(cp.getLastGuessedSolution().person)){

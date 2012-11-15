@@ -50,7 +50,7 @@ public class SuggestionDialog extends JDialog {
 					String notRight = "Sorry, but your suggestion was not correct";
 					JOptionPane.showMessageDialog(null, notRight);
 				} else {
-					String right = "Congradulations, your suggestion was correct";
+					String right = "Congratulations, your suggestion was correct";
 					JOptionPane.showMessageDialog(null, right);
 				}
 			}

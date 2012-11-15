@@ -4,6 +4,8 @@
 
 package dialog;
 
+import javax.swing.JOptionPane;
+
 public class Main {
 
 	/**
@@ -12,6 +14,8 @@ public class Main {
 	public static void main(String[] args) {
 		ClueGame cb = new ClueGame();
 		cb.setVisible(true);
+		JOptionPane.showMessageDialog(null, "You are " + cb.getBoard().hPlayer.getName() + ", press Next Player to play");
+		cb.startGame();
 	}
 
 }

@@ -41,8 +41,6 @@ public class ClueGame extends JFrame {
 		createBoard();
 		createControls();
 		
-		JOptionPane.showMessageDialog(this, "You are " + board.hPlayer.getName() + ", press Next Player to play");
-		
 	}
 	
 	public void createMenuBar() {
@@ -147,10 +145,8 @@ public class ClueGame extends JFrame {
 				rollDiceField.setText(Integer.toString(board.dieRoll));
 				//show suggestion if available;
 				if (board.madeSuggestion) {
-					System.out.println("Setting: " + board.lastGuessedSuggestion.toString());
 					guessField.setText(board.lastGuessedSuggestion.toString());
 					if (board.lastProvenCard != null) {
-						System.out.println("Setting2: " + board.lastProvenCard.getName());
 						guessResultField.setText(board.lastProvenCard.getName());
 					}
 				}
@@ -187,11 +183,12 @@ public class ClueGame extends JFrame {
 		return ret;
 	}
 	
-	public void setGuessField(String s) {
-		guessField.setText(s);
+	public void startGame() {
+		board.makeMove(board.hPlayer);
 	}
 	
-	public void setGuessResultField(String s) {
-		guessResultField.setText(s);
+	public Board getBoard() {
+		return this.board;
 	}
+	
 }

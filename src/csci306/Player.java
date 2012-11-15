@@ -51,7 +51,7 @@ public abstract class Player {
 
 
 	public void setPossibleCards(List<Card> allCards) {
-		this.possibleCards = allCards;
+		this.possibleCards = new ArrayList<Card>(allCards);
 	}
 	
 	public List<Card> getPossibleCards() {

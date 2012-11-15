@@ -48,7 +48,7 @@ public class AccusationDialog extends JDialog {
 					String notRight = "Sorry, but your accusation was not correct";
 					JOptionPane.showMessageDialog(null, notRight);
 				} else {
-					String right = "Congradulations, your accusation was correct";
+					String right = "Congratulations, your accusation was correct";
 					JOptionPane.showMessageDialog(null, right);
 				}
 			}
@@ -57,12 +57,11 @@ public class AccusationDialog extends JDialog {
 	public JPanel createPersonPanel(){
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(new EtchedBorder(), "Person:"));
-		for(Card c: board_copy.allCards){
+		for(Card c : board_copy.allCards){
 			if(c.getType() == CardType.PERSON){
 				personBox.addItem(c.getName());
 			}
 		}
-		personBox.addItem(board_copy.solution.person);
 		panel.add(personBox);
 		return panel;
 	}
@@ -75,7 +74,6 @@ public class AccusationDialog extends JDialog {
 				weaponBox.addItem(c.getName());
 			}
 		}
-		weaponBox.addItem(board_copy.solution.weapon);
 		panel.add(weaponBox);
 		return panel;
 	}
@@ -88,7 +86,6 @@ public class AccusationDialog extends JDialog {
 				roomBox.addItem(c.getName());
 			}
 		}
-		roomBox.addItem(board_copy.solution.room);
 		panel.add(roomBox);
 		return panel;
 	}
