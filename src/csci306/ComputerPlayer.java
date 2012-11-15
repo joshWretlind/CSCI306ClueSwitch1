@@ -19,19 +19,19 @@ public class ComputerPlayer extends Player{
 	}
 	
 	public void createSuggestion() {
-		List<Card> availableGuesses = new ArrayList<Card>(super.getCards());
+		List<Card> availableGuesses = new ArrayList<Card>(super.getPossibleCards());
 		lastGuessedSolution = new Solution();
 		availableGuesses.removeAll(this.getSeenCards());
 		boolean hasPerson = false;
 		boolean hasRoom = false;
 		boolean hasWeapon = false;
 				
-		for (Card c: availableGuesses) {
-			if (!hasPerson && c.getType().equals("PERSON")) {
+		for (Card c : availableGuesses) {
+			if (!hasPerson && c.getType() == Card.CardType.PERSON) {
 				lastGuessedSolution.setPerson(c.getName());
 				hasPerson = true;
 			}
-			else if (!hasWeapon && c.getType().equals("WEAPON")) {
+			else if (!hasWeapon && c.getType() == Card.CardType.WEAPON) {
 				lastGuessedSolution.setWeapon(c.getName());
 				hasWeapon = true;
 			}

@@ -40,7 +40,6 @@ public class ClueGame extends JFrame {
 		createControls();
 		
 		
-		add(board, BorderLayout.CENTER);
 	}
 	
 	public void createMenuBar() {
@@ -77,6 +76,8 @@ public class ClueGame extends JFrame {
 	
 	public void createBoard() {
 		board = new Board();
+		add(board, BorderLayout.CENTER);
+
 		//board.loadPlayers(); Dont do this. The constructor automatically loads and deals the cards.
 		//board.loadCards();
 		//board.deal();
@@ -151,8 +152,8 @@ public class ClueGame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(board.getWhoseTurn() instanceof csci306.HumanPlayer){ // only create this dialog when it's the human player's turn
-					AccusationDialog accDiag = new AccusationDialog(board);
-					accDiag.setVisible(true);
+					//AccusationDialog accDiag = new AccusationDialog(board);
+					//accDiag.setVisible(true);
 				}
 				
 			}
@@ -173,5 +174,10 @@ public class ClueGame extends JFrame {
 		}
 		
 		return ret;
+	}
+	
+	public static void main(String[] args) {
+		ClueGame cb = new ClueGame();
+		cb.setVisible(true);
 	}
 }

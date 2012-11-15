@@ -9,6 +9,7 @@ public abstract class Player {
 	private String name;
 	private List<Card> cards; 
 	private List<Card> seenCards;
+	private List<Card> possibleCards;
 	private BoardCell location;
 	private Color color;
 	
@@ -49,13 +50,25 @@ public abstract class Player {
 	}
 
 
+	public void setPossibleCards(List<Card> allCards) {
+		this.possibleCards = allCards;
+	}
+	
+	public List<Card> getPossibleCards() {
+		return this.possibleCards;
+	}
+	
 	public List<Card> getSeenCards() {
 		return seenCards;
 	}
-
-
+	
 	public void setSeenCards(List<Card> seenCards) {
 		this.seenCards = seenCards;
+	}
+	
+	public void addSeenCard(Card c) {
+		this.seenCards.add(c);
+		
 	}
 
 

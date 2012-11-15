@@ -47,7 +47,7 @@ public class Board extends JPanel {
 		loadPlayers();
 		loadCards();
 		deal();
-		
+		System.out.println("Done dealing");
 		whoseTurn = 0;
 	}
 
@@ -370,6 +370,7 @@ public class Board extends JPanel {
 		return checkAccusation(s.person, s.weapon, s.room);
 	}
 	public boolean checkAccusation(String person, String weapon, String room){
+		
 		if (person.equals(solution.getPerson()) && 
 				weapon.equals(solution.getWeapon()) && 
 				room.equals(solution.getRoom())) {
@@ -390,9 +391,7 @@ public class Board extends JPanel {
 		for(Player p: players){
 			if(p.disproveSuggestion(person, weapon, room) != null){
 				for(Player p2: players){
-					List<Card> seen = new ArrayList<Card>(p2.getSeenCards());
-					seen.add(p.disproveSuggestion(person, weapon, room));
-					p2.setSeenCards(seen);
+					p2.addSeenCard(p.disproveSuggestion(person, weapon, room));
 				}
 				proven = true;
 			}
@@ -402,7 +401,9 @@ public class Board extends JPanel {
 	
 	public void deal(){
 		selectAnswer();
-
+		for (Player p : players) {
+			p.setPossibleCards(allCards);
+		}
 		for (int i = 0; i < allCards.size(); i++) {
 			players.get(i % players.size()).getCards().add(allCards.get(i));
 		}
@@ -455,7 +456,9 @@ public class Board extends JPanel {
 	}
 	
 	public void makeMove(Player p){
-		if(p instanceof csci306.ComputerPlayer){
+		if(p instanceof ComputerPlayer){
+			ComputerPlayer cp = (ComputerPlayer) p;
+			
 			rollDie();
 			calcTargets(calcIndex(p.getLocation().row, p.getLocation().col),dieRoll);
 			List<BoardCell> potentialTargets = new ArrayList<BoardCell>(getTargets());
@@ -463,15 +466,17 @@ public class Board extends JPanel {
 			p.setLocation(potentialTargets.get(0)); // Move to our new location
 			if(p.getLocation().isRoom()){
 				//Make an suggestion. 
-				((csci306.ComputerPlayer) p).createSuggestion();
-				if(!handleSuggestion(((csci306.ComputerPlayer) p).getLastGuessedSolution())){
+				cp.createSuggestion();
+				System.out.println("Attempting suggestion");
+				if(!handleSuggestion(cp.getLastGuessedSolution())) {
 					// if suggestion was not disproven, make it an accusation.
-					checkAccusation(((csci306.ComputerPlayer) p).getLastGuessedSolution());
+					checkAccusation(cp.getLastGuessedSolution());
 					//TODO: Create a popup that displays the accusation.
 				}
 				for(Player player: players){
-					if(player.getName().equalsIgnoreCase(((csci306.ComputerPlayer) p).getLastGuessedSolution().person)){
+					if(player.getName().equalsIgnoreCase(cp.getLastGuessedSolution().person)){
 						player.setLocation(p.getLocation());
+						break;
 					}
 				}
 			}
