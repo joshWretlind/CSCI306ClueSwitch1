@@ -52,8 +52,7 @@ public class AccusationDialog extends JDialog {
 					JOptionPane.showMessageDialog(null, right);
 				}
 			}
-		});
-		
+		});	
 	}
 	public JPanel createPersonPanel(){
 		JPanel panel = new JPanel();

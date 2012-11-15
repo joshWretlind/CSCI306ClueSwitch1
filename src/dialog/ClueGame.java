@@ -160,7 +160,6 @@ public class ClueGame extends JFrame {
 					JOptionPane.showMessageDialog(null, error);
 				}
 			}
-			
 		});
 		
 		add(controls, BorderLayout.SOUTH);
