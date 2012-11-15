@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
@@ -152,10 +153,12 @@ public class ClueGame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(board.getWhoseTurn() instanceof csci306.HumanPlayer){ // only create this dialog when it's the human player's turn
-					//AccusationDialog accDiag = new AccusationDialog(board);
-					//accDiag.setVisible(true);
+					AccusationDialog accDiag = new AccusationDialog(board);
+					accDiag.setVisible(true);
+				} else {
+					String error = "Sorry, but it must be your turn to make a accusation";
+					JOptionPane.showMessageDialog(null, error);
 				}
-				
 			}
 			
 		});
