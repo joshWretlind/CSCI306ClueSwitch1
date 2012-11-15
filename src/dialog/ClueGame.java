@@ -121,10 +121,10 @@ public class ClueGame extends JFrame {
 		dieRollPanel.add(new JLabel("Roll"));
 		dieRollPanel.add(rollDiceField);
 		
-		guessPanel.add(new JLabel("Guess"));
+		guessPanel.add(new JLabel(""));
 		guessPanel.add(guessField);
 		
-		guessResult.add(new JLabel("Result"));
+		guessResult.add(new JLabel(""));
 		guessResult.add(guessResultField);
 		
 		final JTextField whoseTurn = new JTextField(board.getWhoseTurn().getName());
@@ -147,9 +147,12 @@ public class ClueGame extends JFrame {
 				rollDiceField.setText(Integer.toString(board.dieRoll));
 				//show suggestion if available;
 				if (board.madeSuggestion) {
+					System.out.println("Setting: " + board.lastGuessedSuggestion.toString());
 					guessField.setText(board.lastGuessedSuggestion.toString());
-					if (board.lastProvenCard != null)
+					if (board.lastProvenCard != null) {
+						System.out.println("Setting2: " + board.lastProvenCard.getName());
 						guessResultField.setText(board.lastProvenCard.getName());
+					}
 				}
 			}
 			
