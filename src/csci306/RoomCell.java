@@ -102,6 +102,11 @@ public class RoomCell extends BoardCell {
 		int x = col * Board.CELL_SIZE;
 		int y = row * Board.CELL_SIZE;
 		
+		if (isTarget) {
+			g.setColor(new Color(51, 204, 255));
+			g.fillRect(x, y, Board.CELL_SIZE, Board.CELL_SIZE);
+		}
+		
 		if (doorDirection != DoorDirection.NONE) {
 			int height = 5;
 			int width = Board.CELL_SIZE;

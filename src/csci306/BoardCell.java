@@ -7,6 +7,8 @@ public abstract class BoardCell {
 	protected int row;
 	protected int col;
 	
+	protected boolean isTarget;
+	
 	public BoardCell(int row,int col){
 		this.row = row;
 		this.col = col;
@@ -22,8 +24,6 @@ public abstract class BoardCell {
 	public boolean isDoorway(){
 		return false;
 	}
-	
-
 
 	public int getRow() {
 		return row;
@@ -32,8 +32,14 @@ public abstract class BoardCell {
 	public int getCol() {
 		return col;
 	}
-
-	//Create draw method later
+	
+	public void isATarget(boolean val) {
+		isTarget = val;
+	}
+	public void resetTargetFlag() {
+		isTarget = false;
+	}
+	
 	abstract void draw(Graphics g);
 	
 }

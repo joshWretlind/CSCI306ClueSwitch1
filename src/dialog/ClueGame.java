@@ -22,6 +22,7 @@ import javax.swing.border.TitledBorder;
 
 import csci306.Board;
 import csci306.Card;
+import csci306.HumanPlayer;
 
 public class ClueGame extends JFrame {
 	Board board;
@@ -38,7 +39,6 @@ public class ClueGame extends JFrame {
 		createMenuBar();
 		createBoard();
 		createControls();
-		
 		
 	}
 	
@@ -151,9 +151,9 @@ public class ClueGame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(board.getWhoseTurn() instanceof csci306.HumanPlayer){ // only create this dialog when it's the human player's turn
-					//AccusationDialog accDiag = new AccusationDialog(board);
-					//accDiag.setVisible(true);
+				if(board.getWhoseTurn() instanceof HumanPlayer){ // only create this dialog when it's the human player's turn
+					AccusationDialog accDiag = new AccusationDialog(board);
+					accDiag.setVisible(true);
 				}
 				
 			}
@@ -174,10 +174,5 @@ public class ClueGame extends JFrame {
 		}
 		
 		return ret;
-	}
-	
-	public static void main(String[] args) {
-		ClueGame cb = new ClueGame();
-		cb.setVisible(true);
 	}
 }

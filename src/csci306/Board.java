@@ -2,6 +2,8 @@ package csci306;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,7 +22,7 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 
-public class Board extends JPanel {
+public class Board extends JPanel implements MouseListener {
 	public static final int CELL_SIZE = 25;
 	
 	private List<BoardCell> cells ;
@@ -30,7 +32,7 @@ public class Board extends JPanel {
 	public List<Player> players;
 	public List<Card> allCards;
 	public Solution solution;
-	public boolean hasFinishedTurn;
+	public boolean humanTurn;
 	Set<Integer> targets;
 	private Player hPlayer;
 	public int dieRoll;
@@ -47,7 +49,9 @@ public class Board extends JPanel {
 		loadPlayers();
 		loadCards();
 		deal();
-		System.out.println("Done dealing");
+		
+		addMouseListener(this);
+		
 		whoseTurn = 0;
 	}
 
@@ -222,6 +226,10 @@ public class Board extends JPanel {
 		}
 	}
 
+	public boolean isHumanTurn() {
+		return humanTurn;
+	}
+	
 	public Map<Character, String> getRooms() {
 		return rooms;
 	}
@@ -441,7 +449,6 @@ public class Board extends JPanel {
 		return players.get(whoseTurn);
 	}
 	public void nextTurn() {
-		hasFinishedTurn = false;
 		whoseTurn = (++whoseTurn % players.size());
 		makeMove(players.get(whoseTurn));
 	}
@@ -456,11 +463,17 @@ public class Board extends JPanel {
 	}
 	
 	public void makeMove(Player p){
+		rollDie();
+		
+		if (targets != null)
+			for (int c : targets)
+				getCellAt(c).resetTargetFlag();
+		
+		calcTargets(calcIndex(p.getLocation().row, p.getLocation().col),dieRoll);
+		
 		if(p instanceof ComputerPlayer){
-			ComputerPlayer cp = (ComputerPlayer) p;
-			
-			rollDie();
-			calcTargets(calcIndex(p.getLocation().row, p.getLocation().col),dieRoll);
+			humanTurn = false;
+			ComputerPlayer cp = (ComputerPlayer) p;			
 			List<BoardCell> potentialTargets = new ArrayList<BoardCell>(getTargets());
 			Collections.shuffle(potentialTargets);
 			p.setLocation(potentialTargets.get(0)); // Move to our new location
@@ -479,14 +492,23 @@ public class Board extends JPanel {
 						break;
 					}
 				}
-			}
-			hasFinishedTurn = true;
-			paintComponent(super.getGraphics()); // repaint the board
+			}			
 		} else {
-			// We have a human player, handle the human's input
+			humanTurn = true;
+			for (BoardCell c : getTargets()) {
+				c.isATarget(true);
+			}
 		}
+		paintComponent(super.getGraphics()); // repaint the board
 		
 	}
+	
+	public void resetTargetFlags() {
+		if (targets != null)
+			for (int c : targets)
+				getCellAt(c).resetTargetFlag();
+	}
+	
 	/*
 	 * DRAWING METHODS
 	 */	
@@ -528,6 +550,48 @@ public class Board extends JPanel {
 		g.setColor(Color.BLACK);
 		g.drawRect(0, 0, numColumns * CELL_SIZE, numRows * CELL_SIZE);
 	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		if (humanTurn) {
+			int x = e.getX();
+			int y = e.getY();
+			int col = x / CELL_SIZE;
+			int row = y / CELL_SIZE;
+			
+			for (int i : targets) {
+				BoardCell p = getCellAt(i);
+				if (p.getRow() == row && p.getCol() == col) {
+					if (p.isRoom()) {
+						//TODO: Create Suggestion dialog
+						
+					} else {
+						hPlayer.setLocation(p);
+					}
+					
+					resetTargetFlags();
+					paintComponent(super.getGraphics()); // repaint the board because the human player moved
+					break;
+				}
+				
+			}
+			
+		}
+		
+	}
+
+	
+	@Override
+	public void mouseClicked(MouseEvent e) { }
+	
+	@Override
+	public void mouseEntered(MouseEvent e) { }
+
+	@Override
+	public void mouseExited(MouseEvent e) { }
+
+	@Override
+	public void mousePressed(MouseEvent e) { }
 
 	
 }
